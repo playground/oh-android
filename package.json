@@ -15,7 +15,7 @@
     "ibm-login": "ibmcloud login --sso && npm run select-target && npm run select-project && npm run switch-region",
     "select-project": "ibmcloud ce project select -n ieam",
     "select-target": "ibmcloud target -g Default",
-    "switch-region": "npm run build --task=switchRegion",
+    "switch-region": "ibmcloud cr region-set ${region} && ibmcloud cr login",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
