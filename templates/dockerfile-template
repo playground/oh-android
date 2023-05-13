@@ -1,0 +1,69 @@
+FROM registry.access.redhat.com/ubi9:${REDHAT_VERSION} as build
+LABEL ${LABEL_STAGE}
+
+RUN dnf install --nodocs -y wget xz binutils --setopt=install_weak_deps=0 --disableplugin=subscription-manager \
+    && dnf clean all --disableplugin=subscription-manager
+
+RUN mkdir -p /opt/app-root/
+WORKDIR /opt/app-root
+
+# Get / unpack the ARM64 deb bundle
+RUN wget -nv https://github.com/open-horizon/anax/releases/download/${ANAX_VERSION}/${HORIZON_AGENT_GZ} \
+    && gunzip ${HORIZON_AGENT_GZ} \
+    && tar -xvf ${HORIZON_AGENT_TAR} \
+    && ar x ${HORIZON_CLI} \
+    && unxz data.tar.xz \
+    && tar -xvf data.tar \
+    && rm data.tar \
+    && ar x ${HORIZON_AGENT} \
+    && unxz data.tar.xz \
+    && tar -xvf data.tar
+# Everything we need for anax-in-container has been unpacked into ./lib ./etc ./usr
+# The arm64 go binaries for anax and hzn are not specific to Debian and will run in a ubi based Samsung Android container
+
+## Release image
+FROM registry.access.redhat.com/ubi9/ubi-minimal:${REDHAT_VERSION}
+
+LABEL vendor="IBM"
+LABEL summary="The agent in a general purpose container."
+LABEL description="A container which holds the edge node agent, to be used in environments where there is no operating system package that can install the agent natively."
+
+# install docker cli
+ARG DOCKER_VER=23.0.1
+
+# The anax binary (secrets manager code) shells out to groupadd, groupdel (from shadow-utils), pkill (from procps-ng)
+# The anax.service calls jq (from jq) and killall (from psmisc)
+# anax does not use iptables directly but the github.com/coreos/go-iptables/iptables dependency needs the directory structure
+# Install docker cli, which requires tar / gunzip to unpack, then remove tar / gzip packages
+# Create required directories
+ARG REQUIRED_RPMS="openssl ca-certificates shadow-utils jq iptables vim-minimal psmisc procps-ng tar gzip"
+RUN  microdnf update  -y --nodocs --setopt=install_weak_deps=0 --disableplugin=subscription-manager \
+  && microdnf install -y --nodocs --setopt=install_weak_deps=0 --disableplugin=subscription-manager ${REQUIRED_RPMS} \
+  && curl -4fsSLO https://download.docker.com/linux/static/stable/aarch64/docker-${DOCKER_VER}.tgz \
+  && tar xzvf docker-${DOCKER_VER}.tgz --strip 1 -C /usr/bin docker/docker \
+  && rm docker-${DOCKER_VER}.tgz \
+  && microdnf remove -y --disableplugin=subscription-manager tar gzip \
+  && microdnf clean all --disableplugin=subscription-manager \
+  && rm -rf /mnt/rootfs/var/cache/* /mnt/rootfs/var/log/dnf* /mnt/rootfs/var/log/yum.* \
+  && mkdir -p /licenses /usr/horizon/bin /usr/horizon/web /var/horizon \
+  && mkdir -p /etc/horizon/agbot/policy.d /etc/horizon/policy.d /etc/horizon/trust
+
+# add license file
+COPY LICENSE.txt /licenses
+
+# copy anax and hzn binaries
+COPY --from=build /opt/app-root/usr/horizon/bin/anax /usr/horizon/bin/anax
+COPY --from=build /opt/app-root/usr/horizon/bin/hzn  /usr/bin/hzn
+#COPY --from=build /opt/app-root/etc/horizon/trust/*  /etc/horizon/trust/
+
+WORKDIR /root
+COPY script/anax.service /root/
+
+# copy the horizon configurations anax.json, hzn.json, agent-install.crt
+COPY ${HORIZON_CONFIG}/* /etc/horizon/
+COPY ${ETC_DEFAULT}/horizon /etc/default/horizon
+COPY ${ETC_DEFAULT}/node.policy.json /etc/default/node.policy.json
+
+# You can add a 2nd arg to this on the docker run cmd or the CMD statement in another dockerfile, to configure a specific environment
+ENTRYPOINT ["/root/anax.service", "start"]
+

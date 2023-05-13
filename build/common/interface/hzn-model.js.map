@@ -1,0 +1,1 @@
+{"version":3,"file":"hzn-model.js","sourceRoot":"","sources":["../../../src/common/interface/hzn-model.ts"],"names":[],"mappings":";;;AAAa,QAAA,QAAQ,GAAG;IACtB,SAAS,EAAE,YAAY,EAAE,iBAAiB,EAAE,aAAa,EAAE,cAAc;IACzE,gBAAgB,EAAE,oBAAoB,EAAE,gBAAgB,EAAE,iBAAiB,EAAE,YAAY;IACzF,WAAW,EAAE,mBAAmB,EAAE,SAAS,EAAE,UAAU;CACxD,CAAC"}

@@ -1,0 +1,42 @@
+import { Observable } from 'rxjs';
+export declare class Main {
+    envar: any;
+    homePath: any;
+    hznPath: any;
+    androidPath: any;
+    distPath: any;
+    configPath: any;
+    configFile: any;
+    globalPath: any;
+    ohaPath: any;
+    imageName: any;
+    org: any;
+    region: any;
+    dreamAgentName: any;
+    project: any;
+    constructor(org: any, dreamAgentName: any, region: any, project: any);
+    inititialise(): void;
+    configExists(): boolean;
+    replaceToken(template: any, obj: any): any;
+    tokenReplace(template: any, obj: any): any;
+    makeAll(): Observable<unknown>;
+    makeDeploy(): Observable<unknown>;
+    makeSystemFiles(): Observable<unknown>;
+    makeHorizon(): Observable<unknown>;
+    makeAnaxJson(): Observable<unknown>;
+    makeHznJson(): Observable<unknown>;
+    makeNodePolicy(): Observable<unknown>;
+    makeDreamAgentYaml(): Observable<unknown>;
+    makeDockerFile(): Observable<unknown>;
+    adbPushDreamAgent(): Observable<unknown>;
+    makeDirectories(): Observable<unknown>;
+    listDir(dirName: any): Observable<unknown>;
+    makeDir(dirName: any): Observable<unknown>;
+    switchRegion(): Observable<unknown>;
+    buildImage(imageName: any): Observable<unknown>;
+    pushImage(imageName: any): Observable<unknown>;
+    ibmLogin(): Observable<unknown>;
+    shell(arg: any, success?: string, error?: string, prnStdout?: boolean, options?: {
+        maxBuffer: number;
+    }): Observable<unknown>;
+}
