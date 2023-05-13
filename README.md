@@ -1,4 +1,4 @@
-# Anax NodeJS toolkit for application deployment and workload placement  
+# Anax NodeJS toolkit for application deployment and workload placement on Android devices 
 
 The goal is to simplify and to reduce the amount of manual steps in creating and updating configurations and other system files.  
 
