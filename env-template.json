@@ -40,7 +40,7 @@
       }
     }
   },
-  "samsung": {
+  "samsung-R3CT307YNNW": {
     "CONTAINER_NAME": "horizon1",
     "ARCH": "arm64",
     "REGISTRY": "us.icr.io",
