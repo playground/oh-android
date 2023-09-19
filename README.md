@@ -24,12 +24,17 @@ action  Available actions: adbPush adbPushDreamAgent buildImage ibmLogin
 # Examples
 ```
 oha deploy -h
-oha deploy makeAll --org=samsung
 oha deploy ibmLogin   
+oha deploy makeAll --org=samsung
+oha deploy makeDeploy --org=samsung  
+// Note: creates neccessary files to start agent container without build/push docker image
 ```
 
 # Notes
 Typically, the following command is usually what you need to run to generate the config files and push application.yaml to the phone if all the needed values are provided in /hzn-config/.env-local.json file for a particular device.
+
+Update the deployment properties as needed in the init section of dream-agent.yaml file 
+![Alt text](image-1.png)
 
 ```
 oha deploy makeDeploy --org=samsung-R3CT307YNNW
@@ -81,3 +86,16 @@ oha deploy makeDeploy --org=samsung-R3CT307YNNW
   }
 
 ```
+
+After the command completed:
+- go to the DreamAgent on your phone and press the blue down arrow icon to start the container.
+
+![Alt text](image.png)
+
+- Then select horizon container and select init from the dropdown and click SEND to generate the node policy 
+- Then select register to register this device with the generated node policy
+
+![Alt text](image-2.png)
+
+- The containerized applications/services should be up and running once the agreement is reached and deployment is complete.
+- Docker ps or from DreamAgent UI should show the apps that are running
