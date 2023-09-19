@@ -26,7 +26,7 @@ services:
 
 commands:
   ${CONTAINER_NAME}:
-    init: "echo '{\"properties\": [{\"name\": \"${HZN_DEVICE_ID}\", \"value\": \"true\" }],\"constraints\": []}' > ${HZN_NODE_POLICY}"
+    init: "echo '{\"properties\": [{\"name\": \"${HZN_DEVICE_ID}\", \"value\": \"true\" }],\"constraints\": [], \"deployment\": {\"properties\": [{\"name\": \"mms-agent\", \"value\": \"MMS Agent\" },{\"name\": \"auto-dock\", \"value\": \"Auto Dock\" },{\"name\": \"liquid-prep\", \"value\": \"Liquid Prep\" },{\"name\": \"samsung-demo\", \"value\": \"Samsung Demo\" },{\"name\": \"worker-safety\", \"value\": \"Worker Safety\" }]}}' > ${HZN_NODE_POLICY}"
     register: "sh -c 'hzn register -o ${HZN_ORG_ID} -u ${HZN_EXCHANGE_USER_AUTH} --policy ${HZN_NODE_POLICY}'"
     unregister: "hzn unregister -vf"
     stop: "sh -c 'hzn policy update --input-file=${HZN_NODE_POLICY}'"
