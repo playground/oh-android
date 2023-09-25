@@ -29,6 +29,9 @@ export declare class Main {
     makeDreamAgentYaml(): Observable<unknown>;
     makeDockerFile(): Observable<unknown>;
     adbPushDreamAgent(): Observable<unknown>;
+    adbPushCert(): Observable<unknown>;
+    adbPushHorizon(): Observable<unknown>;
+    adbPushPolicy(): Observable<unknown>;
     makeDirectories(): Observable<unknown>;
     listDir(dirName: any): Observable<unknown>;
     makeDir(dirName: any): Observable<unknown>;
