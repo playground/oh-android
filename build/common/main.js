@@ -63,6 +63,7 @@ class Main {
             (0, fs_1.mkdirSync)(this.configPath);
         }
         if ((0, fs_1.existsSync)(this.configFile)) {
+            console.log(this.configFile, this.org);
             this.envar = JSON.parse((0, fs_1.readFileSync)(this.configFile).toString())[this.org];
         }
         // initialize vars needed for token replacement in dockerfile-template file
@@ -115,10 +116,15 @@ class Main {
     makeDeploy() {
         return new rxjs_1.Observable((observer) => {
             let $build = {}, i = 0;
-            $build[i++] = this.makeSystemFiles();
-            $build[i++] = this.adbPushDreamAgent();
-            (0, rxjs_1.forkJoin)($build)
-                .subscribe(() => { observer.next(); observer.complete(); });
+            this.makeSystemFiles()
+                .subscribe(() => {
+                $build[i++] = this.adbPushDreamAgent();
+                $build[i++] = this.adbPushHorizon();
+                $build[i++] = this.adbPushPolicy();
+                $build[i++] = this.adbPushCert();
+                (0, rxjs_1.forkJoin)($build)
+                    .subscribe(() => { observer.next(); observer.complete(); });
+            });
         });
     }
     makeSystemFiles() {
@@ -228,6 +234,48 @@ class Main {
             const dreamAgentPath = this.envar.DREAM_AGENT_PATH || '/sdcard/Android/data/com.srbr.dreamagent/files/docker/';
             const arg = `adb push ${this.distPath}/${this.dreamAgentName} ${dreamAgentPath}`;
             this.shell(arg, `done pushing ${this.dreamAgentName}`, `failed to push ${this.dreamAgentName}`, false)
+                .subscribe({
+                complete: () => { },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+            observer.next();
+            observer.complete();
+        });
+    }
+    adbPushCert() {
+        return new rxjs_1.Observable((observer) => {
+            const arg = `adb push ${this.envar.PROVIDE_CERT} /data/var/agent-install.crt`;
+            this.shell(arg, `done pushing cert`, `failed to push cert`, false)
+                .subscribe({
+                complete: () => { },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+            observer.next();
+            observer.complete();
+        });
+    }
+    adbPushHorizon() {
+        return new rxjs_1.Observable((observer) => {
+            const arg = `adb push ${this.distPath}/horizon /data/var`;
+            this.shell(arg, `done pushing horizon`, `failed to push horizon`, false)
+                .subscribe({
+                complete: () => { },
+                error: (err) => {
+                    console.log(err);
+                }
+            });
+            observer.next();
+            observer.complete();
+        });
+    }
+    adbPushPolicy() {
+        return new rxjs_1.Observable((observer) => {
+            const arg = `adb push ${this.distPath}/node.policy.json /data/var`;
+            this.shell(arg, `done pushing node policy`, `failed to push node policy`, false)
                 .subscribe({
                 complete: () => { },
                 error: (err) => {

@@ -20,6 +20,7 @@ services:
     volumes:
       - "/data/var/user/docker.sock:/var/run/docker.sock"
       - "/data/var/horizon:/data/var/horizon"
+      - "/data/var/node.policy.json:${HZN_NODE_POLICY}"
       - "${HZN_VAR_RUN_BASE}/${CONTAINER_NAME}:${HZN_VAR_RUN_BASE}/${CONTAINER_NAME}"
     restart: always
     container_name: ${CONTAINER_NAME}
@@ -35,7 +36,9 @@ commands:
     sensortag: "echo '{\"properties\": [{\"name\": \"sensortag\", \"value\": \"nodered\" }],\"constraints\": []}' > /tmp/sensortag.json && hzn policy update --input-file=/tmp/sensortag.json"
     gps: "echo '{\"properties\": [{\"name\": \"sensors\", \"value\": \"gps\" }],\"constraints\": []}' > /tmp/gps.json && hzn policy update --input-file=/tmp/gps.json"
     sensorproxy: "echo '{\"properties\": [{\"name\": \"sensors\", \"value\": \"all\" }],\"constraints\": []}' > /tmp/sensorproxy.json && hzn policy update --input-file=/tmp/sensorproxy.json"
-    liquidprep: "echo '{\"properties\": [{\"name\": \"openhorizon.allowPrivileged\", \"value\": \"true\" }],\"constraints\": [], \"deployment\": {\"properties\": [{\"name\": \"liquid-prep-playbox21\", \"value\": \"Liquid Prep Playbox21\" }]}}' > /tmp/liquidprep.json && hzn policy update --input-file=/tmp/liquidprep.json"
+    samsung-demo: "echo '{\"properties\": [{\"name\": \"openhorizon.allowPrivileged\", \"value\": \"true\" }],\"constraints\": [], \"deployment\": {\"properties\": [{\"name\": \"auto-dock\", \"value\": \"Auto Dock\" },{\"name\": \"mms-agent\", \"value\": \"MMS Agent\" },{\"name\": \"samsung-demo\", \"value\": \"Samsung Demo\" },{\"name\": \"worker-safety\", \"value\": \"Worker Safety\" },{\"name\": \"liquid-prep\", \"value\": \"Liquid Prep\" }]}}' > /tmp/samsungdemo.json && hzn policy update --input-file=/tmp/samsungdemo.json"
+    auto-dock: "echo '{\"properties\": [{\"name\": \"openhorizon.allowPrivileged\", \"value\": \"true\" }],\"constraints\": [], \"deployment\": {\"properties\": [{\"name\": \"auto-dock\", \"value\": \"Auto Dock\" }]}}' > /tmp/autodock.json && hzn policy update --input-file=/tmp/autodock.json"
+    liquidprep: "echo '{\"properties\": [{\"name\": \"openhorizon.allowPrivileged\", \"value\": \"true\" }],\"constraints\": [], \"deployment\": {\"properties\": [{\"name\": \"liquid-prep\", \"value\": \"Liquid Prep\" }]}}' > /tmp/liquidprep.json && hzn policy update --input-file=/tmp/liquidprep.json"
     mvireg: "sh -c 'hzn exchange node addpolicy --json-file=/tmp/mviedge.json ${HZN_NODE_ID}'"
     fast: "sh -c 'hzn exchange node update --json-file=/tmp/node-fast.json ${HZN_NODE_ID}'"
     slow: "sh -c 'hzn exchange node update --json-file=/tmp/node-slow.json ${HZN_NODE_ID}'"
