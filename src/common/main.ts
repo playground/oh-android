@@ -330,26 +330,26 @@ export class Main {
                 let arg = `adb shell mkdir ${dirName}`;
                 $makeDir[key] = this.shell(arg,`done mkdir ${dirName}`, `failed to mkdir ${dirName}`, false)
               }
-              if(Object.keys($makeDir).length == 0) {
-                console.log('Directories already exist, nothing to do...')
-                observer.next();
-                observer.complete();                            
-              } else {
-                forkJoin($makeDir)
-                .subscribe({
-                  next: (result) => {
-                    //console.log(result)
-                  },
-                  complete: () => {
-                    observer.next();
-                    observer.complete();              
-                  },
-                  error: (err) => {
-                    console.log(err)
-                  }
-                })  
-              }
             })
+            if(Object.keys($makeDir).length == 0) {
+              console.log('Directories already exist, nothing to do...')
+              observer.next();
+              observer.complete();                            
+            } else {
+              forkJoin($makeDir)
+              .subscribe({
+                next: (result) => {
+                  //console.log(result)
+                },
+                complete: () => {
+                  observer.next();
+                  observer.complete();              
+                },
+                error: (err) => {
+                  console.log(err)
+                }
+              })  
+            }
           },
           error: (err) => {
             console.log(err)
@@ -372,7 +372,7 @@ export class Main {
             observer.complete();
           },
           error: (err) => {
-            observer.next({dir: dirName, exist: err.toString().indexOf('No such file or directory') < 0});
+            observer.next({dir: dirName, exist: false});
             observer.complete();
           }
         })
