@@ -1,0 +1,53 @@
+{
+  "org": {
+    "HZN_ORG_ID": "samsung",
+    "HZN_DEVICE_TOKEN": "",
+    "HZN_DEVICE_ID": "samsung-R3CT307YNNW",
+    "HZN_EXCHANGE_USER_AUTH": "********************",
+    "HZN_EXCHANGE_URL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/v1",
+    "HZN_FSS_CSSURL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-css/",
+    "HZN_AGBOT_URL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-agbot/",
+    "HZN_SDO_SVC_URL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-sdo-ocs/api",
+    "HZN_AGENT_PORT": "8510",
+    "HZN_CSS": true,
+    "HZN_MGMT_HUB_CERT_PATH": "/data/var/agent-install.crt",
+    "CONFIG_CERT_PATH": "/data/var/agent-install.crt",
+    "ANAX": "api/v1/objects/IBM/agent_files/agent-install.sh/data"  
+  },
+  "service": {
+    "SERVICE_NAME": "mms-agent",
+    "SERVICE_CONTAINER_NAME": "mms-agent",
+    "SERVICE_VERSION": "1.0.0",
+    "SERVICE_VERSION_RANGE_UPPER": "1.0.0",
+    "SERVICE_VERSION_RANGE_LOWER": "1.0.0",
+    "SERVICE_CONTAINER_CREDS": "",
+    "VOLUME_MOUNT": "/mms-shared",
+    "MMS_SHARED_VOLUME": "mms_shared_volume",
+    "MMS_OBJECT_TYPE": "mms_agent_config",
+    "MMS_OBJECT_ID": "mms_agent_config_json",
+    "MMS_OBJECT_FILE": "config/config.json",
+    "MMS_CONTAINER_CREDS": "",
+    "MMS_CONTAINER_NAME": "mms-agent",
+    "MMS_SERVICE_NAME": "mms-agent",
+    "MMS_SERVICE_VERSION": "1.0.0",
+    "MMS_SERVICE_FALLBACK_VERSION": "1.0.0",
+    "UPDATE_FILE_NAME": "mms-agent-config.json"
+  },
+  "folders": [
+    "/var/tmp/horizon/horizon1/fss-domain-socket",
+    "/var/tmp/horizon/horizon1/ess-auth",
+    "/var/tmp/horizon/horizon1/secrets",
+    "/var/tmp/horizon/horizon1/nmp"
+  ],
+  "local": {
+    "YOUR_DOCKERHUB_ID": "playbox21",
+    "DOCKER_REGISTRY": "hub.docker.com",
+    "DOCKER_TOKEN": "dckr_pat_wQJZTXR2WfGLohIHnqQylRMRIpk"
+  },
+  "test": true,
+  "anaxInContainer": "docker run -d -t --restart always --name horizon1 --privileged -p 127.0.0.1:8510:8510 -e DOCKER_NAME=horizon1 -e HZN_VAR_RUN_BASE=/data/var/tmp/horizon/horizon1 -e ANAX_DOCKER_ENDPOINT=unix:///var/run/docker.sock -v /data/var/user/docker.sock:/var/run/docker.sock -v /data/var/horizon:/etc/default/horizon:ro -v /data/var/agent-install.crt:/data/var/agent-install.crt -v horizon1_var:/var/horizon/ -v horizon1_etc:/etc/horizon/ -v /data/var/tmp/horizon/horizon1:/data/var/tmp/horizon/horizon1 docker.io/openhorizon/arm64_anax:2.30.0-1194",
+  "anaxInContainer1": "docker run -d -t --restart always --name horizon1 --privileged -e DOCKER_NAME=horizon1 -e HZN_VAR_RUN_BASE=/data/var/tmp/horizon/horizon1 -e ANAX_DOCKER_ENDPOINT=unix:///var/run/docker.sock -v /data/var/user/docker.sock:/var/run/docker.sock -v /data/var/horizon:/etc/default/horizon:ro -v ${CONFIG_CERT_PATH}:${HZN_MGMT_HUB_CERT_PATH}           -v horizon1_var:/var/horizon/ -v horizon1_etc:/etc/horizon/ -v /data/var/tmp/horizon/horizon1:/data/var/tmp/horizon/horizon1 docker.io/openhorizon/arm64_anax:2.30.0-1194",
+  "cliInContainer": "docker run -d -t --restart always --name auto-dock --privileged --network host -v /data/var/lib/docker-bootstrap/volumes/mms_shared_volume/_data:/mms-shared/ -v /data/var/user/docker.sock:/var/run/docker.sock -v /data/var/agent-install.crt:/data/var/agent-install.crt -v /data/var/ieam-samsung-samsung.json:/data/var/ieam-samsung-samsung.json -e HORIZON_URL=http://localhost:8510 -e HZN_ORG_ID=samsung -e HZN_EXCHANGE_USER_AUTH=iamapikey:7oAFNeQizZxHFUMZD2dicC-ZSGlZ8lFyd7QTjwnsfjZO -e HZN_FSS_CSSURL=https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-css/ -e HZN_EXCHANGE_URL=https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/v1 -e HZN_CONFIG_FILE=/data/var/ieam-samsung-samsung.json -e css=true -e version=v2.30.0-1194 playbox21/auto-dock-express_arm64:1.0.5",
+  "cliInContainer1": "docker run -d -t --restart always --name auto-dock --privileged --network host -v /data/var/lib/docker-bootstrap/volumes/mms_shared_volume/_data:/mms-shared/ -v /data/var/user/docker.sock:/var/run/docker.sock -v /data/var/agent-install.crt:/data/var/agent-install.crt -v /data/var/ieam-samsung-samsung.json:/data/var/ieam-samsung-samsung.json -e AGENT_CERT_FILE=/data/var/agent-install.crt -e HZN_MGMT_HUB_CERT_PATH=/data/var/agent-install.crt -e HORIZON_URL=http://localhost:8510 -e HZN_ORG_ID=samsung -e HZN_EXCHANGE_USER_AUTH=iamapikey:Gp3JG7s1Oq0mgzo3h7GgXSjOU1rlObfIOUf0NEqu892k -e HZN_FSS_CSSURL=https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-css/ -e HZN_EXCHANGE_URL=https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/v1 -e HZN_CONFIG_FILE=/data/var/ieam-samsung-samsung.json -e css=true -e version=v2.30.0-1194 playbox21/auto-dock-express_arm64:1.0.5",
+  "cliInContainer0": "docker run -d -t --restart always --name auto-dock --privileged --network=host -v /data/var/lib/docker-bootstrap/volumes/mms_shared_volume/_data:/mms-shared/ -v /data/var/user/docker.sock:/var/run/docker.sock -v ${CONFIG_CERT_PATH}:${HZN_MGMT_HUB_CERT_PATH} -v /data/var/ieam-samsung-samsung.json:/data/var/ieam-samsung-samsung.json -e HORIZON_URL=http://localhost:8081 -e HZN_ORG_ID=${HZN_ORG_ID} -e HZN_EXCHANGE_USER_AUTH=${HZN_EXCHANGE_USER_AUTH} -e HZN_FSS_CSSURL=${HZN_FSS_CSSURL} -e HZN_EXCHANGE_URL=${HZN_EXCHANGE_URL} -e HZN_CONFIG_FILE=/data/var/ieam-samsung-samsung.json -e css=${HZN_CSS} -e version=v2.30.0-1194 playbox21/auto-dock-express_arm64:1.0.5"
+}

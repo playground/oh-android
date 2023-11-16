@@ -14,6 +14,7 @@ export declare class Main {
     region: any;
     dreamAgentName: any;
     project: any;
+    hznConfigJson: any;
     constructor(org: any, dreamAgentName: any, region: any, project: any);
     inititialise(): void;
     configExists(): boolean;
@@ -22,6 +23,7 @@ export declare class Main {
     makeAll(): Observable<unknown>;
     makeDeploy(): Observable<unknown>;
     makeSystemFiles(): Observable<unknown>;
+    makeHznConfigJson(): Observable<unknown>;
     makeHorizon(): Observable<unknown>;
     makeAnaxJson(): Observable<unknown>;
     makeHznJson(): Observable<unknown>;
@@ -31,6 +33,7 @@ export declare class Main {
     adbPushDreamAgent(): Observable<unknown>;
     adbPushCert(): Observable<unknown>;
     adbPushHorizon(): Observable<unknown>;
+    adbPushHznConfigJson(): Observable<unknown>;
     adbPushPolicy(): Observable<unknown>;
     makeDirectories(): Observable<unknown>;
     listDir(dirName: any): Observable<unknown>;

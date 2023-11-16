@@ -49,6 +49,7 @@ export class Main {
   region;
   dreamAgentName;
   project;
+  hznConfigJson;
   constructor(
     org,
     dreamAgentName,
@@ -60,7 +61,7 @@ export class Main {
     this.region = region || 'us-south';
     this.project = project || 'ieam';
 
-    console.log(process.cwd())
+    console.log(process.cwd(), process.env.USERPROFILE)
     this.homePath = process.env[(process.platform == 'win32') ? 'USERPROFILE' : 'HOME'];
     this.hznPath = `${this.homePath}/hzn-config`;
     this.androidPath = `${this.hznPath}/android`;
@@ -145,6 +146,7 @@ export class Main {
       .subscribe(() => {
         $build[i++] = this.adbPushDreamAgent();
         $build[i++] = this.adbPushHorizon();
+        $build[i++] = this.adbPushHznConfigJson();
         $build[i++] = this.adbPushPolicy();
         $build[i++] = this.adbPushCert();
         forkJoin($build)
@@ -156,6 +158,7 @@ export class Main {
     console.log(process.cwd(), this.globalPath)
     return new Observable((observer) => {
       let $build = {}, i = 0;
+      $build[i++] = this.makeHznConfigJson();
       $build[i++] = this.makeHorizon();
       $build[i++] = this.makeAnaxJson();
       $build[i++] = this.makeHznJson();
@@ -167,6 +170,21 @@ export class Main {
       .subscribe({
         next: (res) => { observer.next(); observer.complete()}
       })
+    })    
+  }
+  makeHznConfigJson() {
+    return new Observable((observer) => {
+      try {
+        let file = readFileSync(`${this.ohaPath}/templates/env-hzn.json`).toString();
+        file = this.replaceToken(file, this.envar);
+        this.hznConfigJson = this.envar['HZN_CONFIG_JSON'] || 'ieam-samsung-samsung.json'
+        writeFileSync(`${this.distPath}/${this.hznConfigJson}`, file);
+        console.log('hzn config file generated');
+      } catch(e) {
+        console.log(e)
+      }
+      observer.next();
+      observer.complete();  
     })    
   }
   makeHorizon() {
@@ -292,6 +310,20 @@ export class Main {
       observer.complete();  
     })    
   }
+  adbPushHznConfigJson() {
+    return new Observable((observer) => {
+      const arg = `adb push ${this.distPath}/${this.hznConfigJson} /data/var`;
+      this.shell(arg,`done pushing hzn config file`, `failed to push hzn config file`, false)
+      .subscribe({
+        complete: () => {},
+        error: (err) => {
+          console.log(err)
+        }
+      })
+      observer.next();
+      observer.complete();  
+    })    
+  }
   adbPushPolicy() {
     return new Observable((observer) => {
       const arg = `adb push ${this.distPath}/node.policy.json /data/var`;
@@ -317,9 +349,9 @@ export class Main {
     return new Observable((observer) => {
       try {
         let $listDir = {}
-        Object.keys(dirs).forEach((key) => {
-          $listDir[key] = this.listDir(dirs[key]);
-        })
+        for(let i=0; i<dirs.length; i++) {
+          $listDir[dirs[i]] = this.listDir(dirs[i]);
+        }
         forkJoin($listDir)
         .subscribe({
           next: (result: any) => {
