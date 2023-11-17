@@ -34,12 +34,12 @@ oha deploy makeDeploy --org=samsung
 Typically, the following command is usually what you need to run to generate the config files and push application.yaml to the phone if all the needed values are provided in /hzn-config/.env-local.json file for a particular device.
 
 ```
-oha deploy makeDeploy --org=samsung-R3CT307YNNW
+oha deploy makeDeploy --org=samsung-device-name
 ```
 
 ```
---org=<the-key-of-the-json-object> as shown below
-
+--org=<the-key-of-the-json-object> in the /hzn-config/.env-local.json file as shown below
+{
   "samsung-device-name": {
     "CONTAINER_NAME": "samsung-horizon2",
     "ARCH": "arm64",
@@ -81,7 +81,7 @@ oha deploy makeDeploy --org=samsung-R3CT307YNNW
       }
     }
   }
-
+}
 ```
 
 After the command completed:
