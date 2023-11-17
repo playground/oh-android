@@ -40,32 +40,33 @@ oha deploy makeDeploy --org=samsung-R3CT307YNNW
 ```
 --org=<the-key-of-the-json-object> as shown below
 
-  "samsung-R3CT307YNNW": {
-    "CONTAINER_NAME": "horizon1",
+  "samsung-device-name": {
+    "CONTAINER_NAME": "samsung-horizon2",
     "ARCH": "arm64",
     "REGISTRY": "us.icr.io",
     "NAME_SPACE": "ieam-samsung-colab",
     "IAMUSER": "iamapikey",
     "IAMAPIKEY": "",
-    "SERVICE_NAME": "samsung-anax-roks-stage1",
-    "ANAX_VERSION": "v2.30.0-1177",
+    "SERVICE_NAME": "ieam-samsung",
+    "ANAX_VERSION": "v2.30.0-1194",
     "HORIZON_AGENT": "horizon-agent-linux-deb-arm64.tar.gz",
     "REDHAT_VERSION": "9.1",
     "LABEL_STAGE": "stage=builder",
     "LABEL_VENDOR": "IBM",
     "LABEL_SUMMARY": "The agent in a general purpose container.",
     "LABEL_DESCRIPTION": "A container which holds the edge node agent, to be used in environments where there is no operating system package that can install the agent natively.",
-    "HZN_EXCHANGE_URL": "https://cp-console.ieam-roks-stage-2-70ea81cdef68a2eb78ece6d890b7dad3-0000.us-south.containers.appdomain.cloud/edge-exchange/v1",
-    "HZN_FSS_CSSURL": "https://cp-console.ieam-roks-stage-2-70ea81cdef68a2eb78ece6d890b7dad3-0000.us-south.containers.appdomain.cloud/edge-css/",
-    "HZN_ORG_ID": "anaxsquad",
-    "HZN_DEVICE_ID": "my-samsung-R3CT307YNNW",
+    "HZN_EXCHANGE_URL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/v1",
+    "HZN_FSS_CSSURL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/edge-css/",
+    "HZN_ORG_ID": "samsung",
+    "HZN_DEVICE_ID": "samsung-device-name",
     "HZN_EXCHANGE_USER_AUTH": "",
     "HZN_MGMT_HUB_CERT_PATH": "/etc/horizon/agent-install.crt",
     "HZN_AGENT_PORT": "8510",
-    "HZN_AGBOT_URL": "https://cp-console.ieam-roks-stage-2-70ea81cdef68a2eb78ece6d890b7dad3-0000.us-south.containers.appdomain.cloud/edge-agbot/",
-    "HZN_SDO_SVC_URL": "https://cp-console.ieam-roks-stage-2-70ea81cdef68a2eb78ece6d890b7dad3-0000.us-south.containers.appdomain.cloud/edge-sdo-ocs/api",
+    "HZN_AGBOT_URL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/edge-agbot/",
+    "HZN_SDO_SVC_URL": "https://cp-console.ieam42-edge-8e873dd4c685acf6fd2f13f4cdfb05bb-0000.us-south.containers.appdomain.cloud/edge-exchange/edge-sdo-ocs/api",
     "HZN_NODE_POLICY": "/etc/default/node.policy.json",
     "HZN_VAR_RUN_BASE": "/data/var/tmp/horizon",
+    "PROVIDE_CERT": "/Users/jeff/sandbox/samsung/credential/agent-install-samsung.crt",
     "NODE_POLICY": {
       "properties": [
         {
@@ -75,8 +76,7 @@ oha deploy makeDeploy --org=samsung-R3CT307YNNW
       ],	    
       "deployment": {
         "properties": [
-          {"name": "mms-agent", "value": "MMS Agent"},
-          {"name": "homehub", "value": "Home Automation"}
+          {"name": "auto-dock", "value": "Auto Dock"}
         ]
       }
     }

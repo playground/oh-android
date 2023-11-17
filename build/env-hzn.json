@@ -1,0 +1,42 @@
+{
+  "org": {
+    "HZN_ORG_ID": "${HZN_ORG_ID}",
+    "HZN_DEVICE_TOKEN": "",
+    "HZN_DEVICE_ID": "${HZN_DEVICE_ID}",
+    "HZN_EXCHANGE_USER_AUTH": "${HZN_EXCHANGE_USER_AUTH}",
+    "HZN_EXCHANGE_URL": "${HZN_EXCHANGE_URL}",
+    "HZN_FSS_CSSURL": "${HZN_FSS_CSSURL}",
+    "HZN_AGBOT_URL": "${HZN_AGBOT_URL}",
+    "HZN_SDO_SVC_URL": "${HZN_SDO_SVC_URL}",
+    "HZN_AGENT_PORT": "8510",
+    "HZN_CSS": true,
+    "HZN_MGMT_HUB_CERT_PATH": "/data/var/agent-install.crt",
+    "CONFIG_CERT_PATH": "/data/var/agent-install.crt",
+    "ANAX": "api/v1/objects/IBM/agent_files/agent-install.sh/data"  
+  },
+  "service": {
+    "SERVICE_NAME": "mms-agent",
+    "SERVICE_CONTAINER_NAME": "mms-agent",
+    "SERVICE_VERSION": "1.0.0",
+    "SERVICE_VERSION_RANGE_UPPER": "1.0.0",
+    "SERVICE_VERSION_RANGE_LOWER": "1.0.0",
+    "SERVICE_CONTAINER_CREDS": "",
+    "VOLUME_MOUNT": "/mms-shared",
+    "MMS_SHARED_VOLUME": "mms_shared_volume",
+    "MMS_OBJECT_TYPE": "mms_agent_config",
+    "MMS_OBJECT_ID": "mms_agent_config_json",
+    "MMS_OBJECT_FILE": "config/config.json",
+    "MMS_CONTAINER_CREDS": "",
+    "MMS_CONTAINER_NAME": "mms-agent",
+    "MMS_SERVICE_NAME": "mms-agent",
+    "MMS_SERVICE_VERSION": "1.0.0",
+    "MMS_SERVICE_FALLBACK_VERSION": "1.0.0",
+    "UPDATE_FILE_NAME": "mms-agent-config.json"
+  },
+  "folders": [
+    "/var/tmp/horizon/${CONTAINER_NAME}/fss-domain-socket",
+    "/var/tmp/horizon/${CONTAINER_NAME}/ess-auth",
+    "/var/tmp/horizon/${CONTAINER_NAME}/secrets",
+    "/var/tmp/horizon/${CONTAINER_NAME}/nmp"
+  ]
+}
