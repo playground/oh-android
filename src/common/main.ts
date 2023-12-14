@@ -3,6 +3,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
 import jsonfile from 'jsonfile';
 import { resolve } from 'path';
 import { forkJoin, Observable } from 'rxjs';
+import { toArray } from 'rxjs/operators';
 
 const installTar = {
   "x86_64": "horizon-agent-linux-deb-amd64.tar.gz",
@@ -267,19 +268,49 @@ export class Main {
       observer.complete();  
     })    
   }
-  adbPushDreamAgent() {
+  adbMakedir(dir: string) {
     return new Observable((observer) => {
-      const dreamAgentPath = this.envar.DREAM_AGENT_PATH || '/sdcard/Android/data/com.srbr.dreamagent/files/docker/';
-      const arg = `adb push ${this.distPath}/${this.dreamAgentName} ${dreamAgentPath}`;
-      this.shell(arg,`done pushing ${this.dreamAgentName}`, `failed to push ${this.dreamAgentName}`, false)
+      let arg = `adb shell ls ${dir}`;
+      this.shell(arg,`done ls ${dir}`, `failed to ls ${dir}`, false)
       .subscribe({
-        complete: () => {},
+        complete: () => {
+          observer.next()
+          observer.complete()
+        },
         error: (err) => {
-          console.log(err)
+          arg = `adb shell mkdir ${dir}`;
+          this.shell(arg,`done pushing ${this.dreamAgentName}`, `failed to push ${this.dreamAgentName}`, false)
+          .subscribe({
+            complete: () => {
+              observer.next()
+              observer.complete()
+            },
+            error: (err) => {
+              console.log(err)
+              process.exit(1)
+            }      
+          })
         }
       })
-      observer.next();
-      observer.complete();  
+    })  
+  }
+  adbPushDreamAgent() {
+    return new Observable((observer) => {
+      const dreamAgentPath = this.envar.DREAM_AGENT_PATH || '/sdcard/dreamagent_config';
+      this.adbMakedir(dreamAgentPath)
+      .subscribe(() => {
+        const arg = `adb push ${this.distPath}/${this.dreamAgentName} ${dreamAgentPath}`;
+        this.shell(arg,`done pushing ${this.dreamAgentName}`, `failed to push ${this.dreamAgentName}`, false)
+        .subscribe({
+          complete: () => {
+            observer.next();
+            observer.complete();        
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        })
+      })
     })    
   }
   adbPushCert() {
@@ -287,13 +318,15 @@ export class Main {
       const arg = `adb push ${this.envar.PROVIDE_CERT} /data/var/agent-install.crt`;
       this.shell(arg,`done pushing cert`, `failed to push cert`, false)
       .subscribe({
-        complete: () => {},
+        complete: () => {
+          observer.next();
+          observer.complete();      
+        },
         error: (err) => {
           console.log(err)
+          process.exit(1)
         }
       })
-      observer.next();
-      observer.complete();  
     })    
   }
   adbPushHorizon() {
@@ -301,13 +334,15 @@ export class Main {
       const arg = `adb push ${this.distPath}/horizon /data/var`;
       this.shell(arg,`done pushing horizon`, `failed to push horizon`, false)
       .subscribe({
-        complete: () => {},
+        complete: () => {
+          observer.next();
+          observer.complete();      
+        },
         error: (err) => {
           console.log(err)
+          process.exit(1)
         }
       })
-      observer.next();
-      observer.complete();  
     })    
   }
   adbPushHznConfigJson() {
@@ -315,13 +350,15 @@ export class Main {
       const arg = `adb push ${this.distPath}/${this.hznConfigJson} /data/var`;
       this.shell(arg,`done pushing hzn config file`, `failed to push hzn config file`, false)
       .subscribe({
-        complete: () => {},
+        complete: () => {
+          observer.next();
+          observer.complete();      
+        },
         error: (err) => {
           console.log(err)
+          process.exit(1)
         }
       })
-      observer.next();
-      observer.complete();  
     })    
   }
   adbPushPolicy() {
@@ -329,13 +366,15 @@ export class Main {
       const arg = `adb push ${this.distPath}/node.policy.json /data/var`;
       this.shell(arg,`done pushing node policy`, `failed to push node policy`, false)
       .subscribe({
-        complete: () => {},
+        complete: () => {
+          observer.next();
+          observer.complete();      
+        },
         error: (err) => {
           console.log(err)
+          process.exit(1)
         }
       })
-      observer.next();
-      observer.complete();  
     })    
   }
   makeDirectories() {
