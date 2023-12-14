@@ -30,6 +30,7 @@ export declare class Main {
     makeNodePolicy(): Observable<unknown>;
     makeDreamAgentYaml(): Observable<unknown>;
     makeDockerFile(): Observable<unknown>;
+    adbMakedir(dir: string): Observable<unknown>;
     adbPushDreamAgent(): Observable<unknown>;
     adbPushCert(): Observable<unknown>;
     adbPushHorizon(): Observable<unknown>;
